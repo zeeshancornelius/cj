@@ -70,11 +70,40 @@
                     canvas1.style.height = "500px";
           }
         });
+        
+        function sendDesign(el){
+        	var canvas = document.getElementById("c");
+            	var dt = canvas.toDataURL('image/png');
+    			$.ajax({
+				  type: "POST",
+				  url: "http://creative-junction.com/News/upload_canvas",
+				  data: { 
+				     imgBase64: dt,
+				     email : $("#email").val(),
+				     company : $("#company-name").val()
+				  }
+				}).done(function(o) {
+				  console.log('saved'); 
+				  alert(o);
+				  // If you want the file to be visible in the browser 
+				  // - please modify the callback in javascript. All you
+				  // need is to return the url to the file, you just saved 
+				  // and than put the image in your browser.
+				});
+        }
+        
         $(document).ready(function () {
             // Handler for .ready() called.
             $('html, body').animate({
                 scrollTop: $('#main').offset().top
             }, 'slow');
+            $("#instructions-modal").modal();
+            $("#how-to").click(function(){
+            	$("#instructions-modal").modal();
+            });
+            $("#create-image").click(function(){
+            	$("#info-modal").modal();
+            });
         });
 
         function addText(el){
@@ -105,25 +134,26 @@
     </script>
 </head>
 <body id="page-top" class="index">
-<div class = "">   
-    <div style = "top: 50px;z-index: 9999;left: 30px;"><img src = "images/cj-logo.png" height = "50px" ></div>
-    <nav>
+<div class = "container">
+	<nav>
         <span id = "menu-prim" style = "color:red; cursor:pointer" >
                 <i class="fa fa-bars fa-3x"></i>
         </span>
         <ul class = "hidden_menu_primary pull-left text-center" style = "height: 600px; width : 100%; padding-top:200px">
             <li>
-                <a href = "#" onclick="window.open('http://www.creative-junction.com/', '_system');">Visit Website</a>
+                <a style = "color : black" href = "#" onclick="window.open('http://www.creative-junction.com/', '_system');">Visit Website</a>
             </li>
             <li style = "padding-top : 20px">
-                <a href="blog.html" data-ajax="false">What's Trending</a>
+                <a style = "color : black" href="blog.html" data-ajax="false">What's Trending</a>
             </li>
             <li style = "padding-top : 30px">
-                <a href="#">Wireframe Print Add</a>
+                <a style = "color : black" href="#">Wireframe Print Add</a>
             </li>
             
         </ul>
-    </nav>
+    </nav>   
+    <div style = "top: 50px;z-index: 9999;left: 30px;" class = "text-center" ><img src = "images/cj-logo.png" height = "50px" ></div>
+
 </div>
     <!-- Navigation -->
     <nav class="primary-menu">
@@ -160,11 +190,13 @@
 
     <div class="container" style = "margin-top:50px">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3" id = "can-div" >
             <canvas id="c" width="300" height="500"></canvas>
         </div>
     </div>
-    </div>    
+    <span class = "pull-right" id = "how-to">How to use</span>
+    </div>
+    <a class = "btn btn-default" style = "width : 100%; color : black" download="wireframe.jpg" id = "create-image" >Create Image</a>    
 </div>
 
 
@@ -219,7 +251,51 @@
 </div>
 </div>
 
+<div class = "col-sm-12">
+  <div class="modal fade" id="instructions-modal" role="dialog" style = "margin-top: 100px" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">How To?</h4>
+        </div>
+        <div class="modal-body">
+            <p>Tap the red triangle to add objects required and then drag, resize and drop the objects. </p><p>Long tap an object to delete</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style = "color: black;">Close</button>
+        </div>
+      </div>
 
+  </div>
+</div>
+</div>
+
+<div class = "col-sm-12">
+  <div class="modal fade" id="info-modal" role="dialog" style = "margin-top: 100px" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please enter the following information to continue</h4>
+        </div>
+        <div class="modal-body">
+            <label>Company Name : </label><input class = "form-control" id = "company-name" />
+            <label>Email Address : </label><input type = "email" class = "form-control" id = "email" />
+        </div>
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-default" style = "color: black;" onclick = "sendDesign(this)" >Send</button>
+         	<button type="button" class="btn btn-default" data-dismiss="modal" style = "color: black;">Close</button>
+        </div>
+      </div>
+
+  </div>
+</div>
+</div>
 
 
 
